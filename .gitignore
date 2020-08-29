@@ -3,8 +3,8 @@ config/config.json
 .env
 package-lock.json
 /dist
+controllers/dist
+routes/dist
 migrations/dist
 models/dist
-routes/dist
 seeders/dist
-controllers/dist
