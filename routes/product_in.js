@@ -5,6 +5,6 @@ const ProductInController = require('../controllers/ProductInController')
 
 router
   .get('/home', ProductInController.home)
-  .get('/', ProductInController.getProductIns)
+  .get('/:id', ProductInController.getProductIn)
 
 module.exports = router
