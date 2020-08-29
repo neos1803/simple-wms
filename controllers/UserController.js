@@ -4,7 +4,9 @@ const { User } = require("../models")
 const pagination = require("../helpers/pagination")
 
 // memanggil validasi data user required field maka error di login, register, maupun post user
-const { registerValidation } = require("../helpers/validation");
+const {
+  registerValidation
+} = require("../helpers/validation");
 const response = require('../helpers/response')
 
 // atrributes tertentu yang ditampilkan di postman
@@ -16,7 +18,7 @@ class UserController {
     return res.status(200).json(response("Success", "Sukses akses!", "Hai from User Controller"))
   }
 
-  static async getUsers(req, res){
+  static async getUsers(req, res) {
     try {
       const count = await User.count()
 
@@ -45,7 +47,10 @@ class UserController {
   }
 
   static async getUser(req, res) {
-    const { id } = req.params
+    const {
+      id
+    } = req.params
+
     const userget = await User.findByPk(
       id, {
         attributes: attUser
@@ -63,20 +68,41 @@ class UserController {
     }
   }
 
-  static async saveUser(req, res){
-    const { full_name, username, password, email, phone_number, role } = req.body.data
+  static async saveUser(req, res) {
+    const {
+      full_name,
+      username,
+      password,
+      email,
+      phone_number,
+      role
+    } = req.body.data
 
     // Validasi jika user sudah ada maka error
-    const { error } = registerValidation(req.body.data)
-    if(error) return res.status(400).json(response("Failed!", error.details[0].message, ""))
+    const {
+      error
+    } = registerValidation(req.body.data)
+    if (error) return res.status(400).json(response("Failed!", error.details[0].message, ""))
 
     // cek apakah alamat email, username, dan phone_number sudah ada
-    const emailExist = await User.findOne({ where: { email: email }})
-    const usernameExist = await User.findOne({ where: { username: username }})
-    const phoneExist = await User.findOne({ where: { phone_number: phone_number }})
+    const emailExist = await User.findOne({
+      where: {
+        email: email
+      }
+    })
+    const usernameExist = await User.findOne({
+      where: {
+        username: username
+      }
+    })
+    const phoneExist = await User.findOne({
+      where: {
+        phone_number: phone_number
+      }
+    })
 
     // Hash password
-    const salted = await bcrypt.genSalt(10);
+    const salted = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salted)
 
     try {
@@ -86,7 +112,13 @@ class UserController {
       else {
         // simpan data user
         const savedUser = await User.create({
-          full_name, username, password, salt: hashedPassword, email, phone_number, role
+          full_name,
+          username,
+          password,
+          salt: hashedPassword,
+          email,
+          phone_number,
+          role
         })
 
         // tampilkan data yang ditambahkan
@@ -105,11 +137,32 @@ class UserController {
     }
   }
 
-  static async updateUser(req, res){
-    const { id } = req.params
-    const { full_name, username, email, phone_number, role, password } = req.body.data;
-    const userUpdate = await User.update({ full_name, username, email, phone_number, role },
-      { where: { id: id }})
+  static async updateUser(req, res) {
+    const {
+      id
+    } = req.params
+
+    const {
+      full_name,
+      username,
+      email,
+      phone_number,
+      role,
+      password
+    } = req.body.data;
+
+    const userUpdate = await User.update({
+      full_name,
+      username,
+      email,
+      phone_number,
+      role
+    }, {
+      where: {
+        id: id
+      }
+    })
+
     const showUser = await User.findByPk(
       id, {
         attributes: attUser
@@ -117,9 +170,9 @@ class UserController {
     )
 
     try {
-      if (password){
+      if (password) {
         return res.status(400).json(response("Failed", "Update password hanya bisa oleh Admin!", "Kosong"))
-      } else if(userUpdate) {
+      } else if (userUpdate) {
         return res.status(200).json(response("Success", "Sukses update user!", showUser))
       } else {
         return res.status(400).json(response("Failed!", "Data user tidak ada!", "Kosong"))
@@ -129,11 +182,16 @@ class UserController {
     }
   }
 
-  static async deleteUser(req, res){
-    const { id } = req.params
-    const delUser = await User.destroy({ where: {
-      id: id
-    }})
+  static async deleteUser(req, res) {
+    const {
+      id
+    } = req.params
+
+    const delUser = await User.destroy({
+      where: {
+        id: id
+      }
+    })
 
     try {
       if (delUser) {
