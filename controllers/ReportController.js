@@ -29,7 +29,7 @@ class Controller {
         const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
-        const { count: count_admin, rows:rows_admin } = await models.User.findAndCountAll({ where: { role: "admin" } })
+        // const { count: count_admin, rows:rows_admin } = await models.User.findAndCountAll({ where: { role: "admin" } })
         if (req.query.type == "in") {
             const name = "Product in Monthly Report";
             const { count, rows } = await models.Product_In.findAndCountAll( { 
@@ -37,37 +37,6 @@ class Controller {
                 include: models.Product
             })
             createPdf({ count, rows, name: name , month: monthNames[month] })
-            const task = cron.schedule("0 0 1 * *", () => {
-                for (let i = 0; i < count_admin; i++) {
-                    const mailOptions = {
-                        from: process.env.GMAIL_USERNAME,
-                        to: rows_admin[i].email,
-                        subject: `[Monthly Notification] of ${monthNames[month]}`,
-                        attachments: [{
-                            filename: "Monthly Report",
-                            path: `././asset/pdf/${monthNames[month].toLowerCase()}-${name.toLowerCase()}.pdf`,
-                            contentType: "application/pdf"
-                        }]
-                    }
-                    transporter.sendMail(mailOptions)
-                }
-            })
-            // const task = cron.schedule("* * * * *", () => {
-            //     for (let i = 0; i < count_admin; i++) {
-            //         const mailOptions = {
-            //             from: process.env.GMAIL_USERNAME,
-            //             to: rows_admin[i].email,
-            //             subject: `[Monthly Notification] of ${monthNames[month]}`,
-            //             attachments: [{
-            //                 filename: "Monthly Report",
-            //                 path: `././asset/pdf/${monthNames[month].toLowerCase()}-${name.toLowerCase()}.pdf`,
-            //                 contentType: "application/pdf"
-            //             }]  
-            //         }
-            //         transporter.sendMail(mailOptions)
-            //     }
-            // })
-            // task(start);
         }
         if (req.query.type == "out") {
             const name = "Product out Monthly Report";
@@ -77,22 +46,6 @@ class Controller {
             })
             // console.log(rows[0].Product["name"])
             createPdf({ count, rows, name: name, month: monthNames[month] })
-            const task = cron.schedule("0 0 1 * *", () => {
-                for (let i = 0; i < count_admin; i++) {
-                    const mailOptions = {
-                        from: process.env.GMAIL_USERNAME,
-                        to: rows_admin[i].email,
-                        subject: `[Monthly Notification] of ${monthNames[month]}`,
-                        attachments: [{
-                            filename: "Monthly Report",
-                            path: `././asset/pdf/${monthNames[month].toLowerCase()}-${name.toLowerCase()}.pdf`,
-                            contentType: "application/pdf"
-                        }]
-                    }
-                    transporter.sendMail(mailOptions)
-                }
-            })
-            task(start);
         }
         if (req.query.type == "all") {
             const name = "All activity Monthly Report";
@@ -113,22 +66,6 @@ class Controller {
                 month: monthNames[month], type: "all" 
             })
             console.log(rows_out[0])
-            const task = cron.schedule("0 0 1 * *", () => {
-                for (let i = 0; i < count_admin; i++) {
-                    const mailOptions = {
-                        from: process.env.GMAIL_USERNAME,
-                        to: rows_admin[i].email,
-                        subject: `[Monthly Notification] of ${monthNames[month]}`,
-                        attachments: [{
-                            filename: "Monthly Report",
-                            path: `././asset/pdf/${monthNames[month].toLowerCase()}-${name.toLowerCase()}.pdf`,
-                            contentType: "application/pdf"
-                        }]
-                    }
-                    transporter.sendMail(mailOptions)
-                }
-            })
-            task(start);
         }
         // console.log(rows[0].Product.name)
     }
