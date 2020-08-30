@@ -25,7 +25,7 @@ class Controller {
     }
 
     static async monthlyNotification(req, res) {
-        const month = new Date().getMonth()
+        const month = new Date().getMonth() //7
         const monthNames = ["January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
         ];
@@ -67,7 +67,7 @@ class Controller {
             //         transporter.sendMail(mailOptions)
             //     }
             // })
-            task(start);
+            // task(start);
         }
         if (req.query.type == "out") {
             const name = "Product out Monthly Report";
@@ -112,7 +112,7 @@ class Controller {
                 name: name, 
                 month: monthNames[month], type: "all" 
             })
-            // console.log(rows_out[0])
+            console.log(rows_out[0])
             const task = cron.schedule("0 0 1 * *", () => {
                 for (let i = 0; i < count_admin; i++) {
                     const mailOptions = {

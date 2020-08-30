@@ -37,6 +37,7 @@ class ProductInController {
           attributes: attProduct,
           include: [{
             model: User,
+            as: "supplier",
             attributes: attUser
           }]
         }]
@@ -66,6 +67,7 @@ class ProductInController {
           attributes: attProduct,
           include: [{
             model: User,
+            as: "supplier",
             attributes: attUser
           }]
         }]
@@ -134,6 +136,7 @@ class ProductInController {
           attributes: attProduct,
           include: [{
             model: User,
+            as: "supplier",
             attributes: attUser
           }]
         }]
@@ -142,9 +145,9 @@ class ProductInController {
 
     try {
       if (inUpdate) {
-        return res.status(200).json(response("Success", "Sukses update user!", showIn))
+        return res.status(200).json(response("Success", "Sukses update data masuk!", showIn))
       } else {
-        return res.status(400).json(response("Failed!", "Data user tidak ada!", "Kosong"))
+        return res.status(400).json(response("Failed!", "Data masuk tidak ada!", "Kosong"))
       }
     } catch (error) {
       return res.status(400).json(response("Failed", error.message, "Kosong"))
@@ -164,6 +167,7 @@ class ProductInController {
           attributes: attProduct,
           include: [{
             model: User,
+            as: "supplier",
             attributes: attUser
           }]
         }]

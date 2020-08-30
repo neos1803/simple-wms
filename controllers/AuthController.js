@@ -10,14 +10,14 @@ class Controller {
         try {
             const user = await models.User.findOne({
                 where: {
-                    username: req.body.username,
+                    username: req.body.data.username,
                 }
             })
 
             if (!user) {
                 return res.status(422).json(response("Fail", "Username or password not found"))
             }
-            if (!(bcrypt.compareSync(req.body.password, user.password))) {
+            if (!(bcrypt.compareSync(req.body.data.password, user.password))) {
                 return res.status(422).json(response("Fail", "Username or password not found"))
             }
             const token = jwt.sign(user.id, jwtSecret)

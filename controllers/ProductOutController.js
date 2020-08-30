@@ -9,20 +9,21 @@ class Controller {
     static async create (req, res) {
         try {
             // Get product data by the given product_id
-            const products = await models.Product.findByPk(req.body.product_id)
+            console.log(req.body.data.product_id)
+            const products = await models.Product.findByPk(req.body.data.product_id)
             
             // Check if stocks product is enough
-            if (req.body.total > products.stock) {
+            if (req.body.data.total > products.stock) {
                return res.status(422).json(response("Fail", "Can't afford to check-out due to stock insufficient"))
             }
 
             // Create new Chekout data
-            const out = await models.Product_Out.create(req.body)
+            const out = await models.Product_Out.create(req.body.data)
 
             // Update stock product after checkout
-            await models.Product.update({ stock: products.stock - req.body.total }, { where: { id: products.id } })
+            await models.Product.update({ stock: products.stock - req.body.data.total }, { where: { id: products.id } })
 
-            if ((req.body.total - products.stock) == 0) {
+            if ((req.body.data.total - products.stock) == 0) {
                 // Send empty stock email notification to admin
                 ReportController.emptyNotification(products.name, out.date)
             }
@@ -98,7 +99,7 @@ class Controller {
             }
 
             // Update model product_out dengan id yang sesuai
-            await models.Product_Out.update(req.body, {
+            await models.Product_Out.update(req.body.data, {
                 where: {
                     id: req.params.id
                 }
@@ -107,7 +108,7 @@ class Controller {
             // Data yang akan ditampilkan di response
             const data = {
                 "Old data": find,
-                "New data": req.body
+                "New data": req.body.data
             }
 
             res.status(200).json(response("Success", "Checkout data is updated", data))

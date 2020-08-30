@@ -18,6 +18,7 @@ class UserController {
     return res.status(200).json(response("Success", "Sukses akses!", "Hai from User Controller"))
   }
 
+  // Ambil semua user
   static async getUsers(req, res) {
     try {
       const count = await User.count()
@@ -46,6 +47,7 @@ class UserController {
     }
   }
 
+  // Ambil semua user by id
   static async getUser(req, res) {
     const {
       id

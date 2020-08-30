@@ -3,11 +3,12 @@ const cloudinary = require('cloudinary').v2
 const cloudConfig = require('../config/cloudinaryConfig')
 cloudinary.config(cloudConfig)
 
-const { Product } = require("../models")
+const { Product, User } = require("../models")
 const response = require('../helpers/response')
 const pagination = require('../helpers/pagination')
 
 const attProduct = ['name', 'photo_url', 'stock', 'price']
+const attUser = ['full_name', 'username', 'email', 'phone_number', 'role']
 
 class ProductController {
   // uji coba routes berjalan dengan baik
@@ -25,6 +26,7 @@ class ProductController {
         attributes: attProduct,
         include: [{
           model: User,
+          as: "supplier",
           attributes: attUser
         }]
       }
@@ -47,8 +49,9 @@ class ProductController {
         name,
         stock,
         price,
-        user_id
       } = req.body
+
+      const user_id = req.user_id
 
       // ambil file dari body request
       const uploadFile = req.files.photo
@@ -63,7 +66,7 @@ class ProductController {
         name,
         stock,
         price,
-        user_id,
+        user_id: user_id,
         // ambil id dan url dari variabel image
         photo_id: image.public_id,
         photo_url: image.secure_url,
@@ -100,7 +103,8 @@ class ProductController {
         attributes: attProduct,
         include: [{
           model: User,
-          attributes: attUser
+          as: "supplier",
+          attributes: attUser,
         }]
       })
 
@@ -144,6 +148,7 @@ class ProductController {
         attributes: attProduct,
         include: [{
           model: User,
+          as: "supplier",
           attributes: attUser
         }]
       }
@@ -175,7 +180,7 @@ class ProductController {
       if (delProduct) {
         return res.status(200).json(response("Success", "Sukses hapus data user!", `ID : ${id}`))
       } else {
-        return res.status(400).json(response("Failed", "Data tidak user tidak ada!", `ID : ${id}`))
+        return res.status(400).json(response("Failed", "Data produk tidak ada!", `ID : ${id}`))
       }
     } catch (error) {
       return res.status(400).json(response("Failed", error.message, "Kosong"))
