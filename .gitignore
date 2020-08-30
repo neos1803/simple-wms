@@ -8,3 +8,7 @@ routes/dist
 migrations/dist
 models/dist
 seeders/dist
+helpers/dist
+middleware/dist
+tmp
+config/dist
