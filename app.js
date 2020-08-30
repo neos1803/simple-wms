@@ -16,6 +16,7 @@ const authRoute = require('./routes/auth')
 const productOutRoute = require('./routes/product_out')
 const reportRoute = require('./routes/print')
 const auth = require('./middleware/AuthMiddleware')
+const taskScheduler = require('./helpers/taskScheduler')
 
 // untuk cloudinary
 app.use(fileUpload({
@@ -31,5 +32,8 @@ app.use('/api/v1/in', auth, productInRoute)
 app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/out', auth, productOutRoute)
 app.use('/api/v1/print', auth, reportRoute)
+
+taskScheduler()
+
 
 app.listen(port, () => console.log('Listened on port ' + port))
