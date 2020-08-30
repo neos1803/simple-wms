@@ -21,14 +21,14 @@
                 <% if (!data.type) { %>
                 <table>
                 <tr>
-                    <th>Id</th>
+                    <th>Number</th>
                     <th>Product Name</th>
                     <th>Date (YYYY-MM-DD)</th>
                     <th>Total</th>
                 </tr>
                     <% for (let i = 0; i < data.count; i++) { %>
                         <tr>
-                            <td><%= data.rows[i].id %></td>
+                            <td><%= i + 1 %></td>
                             <td><%= data.rows[i].Product["name"] %></td>
                             <td><%= data.rows[i].date.getFullYear() + '-' + (data.rows[i].date.getMonth() + 1) + '-' + data.rows[i].date.getDate() %></td>
                             <td><%= data.rows[i].total %></td>
