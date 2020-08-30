@@ -1,5 +1,5 @@
 require('dotenv').config()
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const { User } = require("../models")
 const pagination = require("../helpers/pagination")
 
@@ -75,7 +75,6 @@ class UserController {
       password,
       email,
       phone_number,
-      role
     } = req.body.data
 
     // Validasi jika user sudah ada maka error
@@ -102,8 +101,8 @@ class UserController {
     })
 
     // Hash password
-    const salted = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salted)
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt)
 
     try {
       if (usernameExist) return res.status(404).json(response("Failed!", "Username sudah terdaftar!", ""))
@@ -114,11 +113,11 @@ class UserController {
         const savedUser = await User.create({
           full_name,
           username,
-          password,
-          salt: hashedPassword,
+          password: hashedPassword,
+          salt: salt,
           email,
           phone_number,
-          role
+          role: "user"
         })
 
         // tampilkan data yang ditambahkan

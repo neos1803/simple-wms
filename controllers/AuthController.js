@@ -2,6 +2,7 @@ require('dotenv').config()
 const models = require("../models")
 const response = require('../helpers/response')
 const jwt = require('jsonwebtoken')
+const bcrypt = require("bcrypt")
 const jwtSecret = process.env.SECRET
 
 class Controller {
@@ -9,12 +10,15 @@ class Controller {
         try {
             const user = await models.User.findOne({
                 where: {
-                    username: req.body.username
+                    username: req.body.username,
                 }
             })
 
             if (!user) {
-                return res.status(422).json(response("Fail", "Username not found"))
+                return res.status(422).json(response("Fail", "Username or password not found"))
+            }
+            if (!(bcrypt.compareSync(req.body.password, user.password))) {
+                return res.status(422).json(response("Fail", "Username or password not found"))
             }
             const token = jwt.sign(user.id, jwtSecret)
             
