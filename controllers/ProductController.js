@@ -7,7 +7,7 @@ const { Product, User } = require("../models")
 const response = require('../helpers/response')
 const pagination = require('../helpers/pagination')
 
-const attProduct = ['name', 'photo_url', 'stock', 'price']
+const attProduct = ['id', 'name', 'photo_url', 'stock', 'price']
 const attUser = ['full_name', 'username', 'email', 'phone_number', 'role']
 
 class ProductController {
@@ -53,6 +53,9 @@ class ProductController {
 
       const user_id = req.user_id
 
+      // if (!req.files) {
+      //   return res.status(500).send({ msg: "file is not found" })
+      // }
       // ambil file dari body request
       const uploadFile = req.files.photo
 
@@ -156,9 +159,9 @@ class ProductController {
 
     try {
       if (productUpdate) {
-        return res.status(200).json(response("Success", "Sukses update user!", showProduct))
+        return res.status(200).json(response("Success", "Sukses update data produk!", showProduct))
       } else {
-        return res.status(400).json(response("Failed!", "Data user tidak ada!", "Kosong"))
+        return res.status(400).json(response("Failed!", "Data data produk tidak ada!", "Kosong"))
       }
     } catch (error) {
       return res.status(400).json(response("Failed", error.message, "Kosong"))
@@ -178,7 +181,7 @@ class ProductController {
 
     try {
       if (delProduct) {
-        return res.status(200).json(response("Success", "Sukses hapus data user!", `ID : ${id}`))
+        return res.status(200).json(response("Success", "Sukses hapus data produk!", `ID : ${id}`))
       } else {
         return res.status(400).json(response("Failed", "Data produk tidak ada!", `ID : ${id}`))
       }

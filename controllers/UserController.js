@@ -10,7 +10,7 @@ const {
 const response = require('../helpers/response')
 
 // atrributes tertentu yang ditampilkan di postman
-const attUser = ['full_name', 'username', 'email', 'phone_number', 'role']
+const attUser = ['id', 'full_name', 'username', 'email', 'phone_number', 'role']
 
 class UserController {
   // uji coba routes berjalan dengan baik
@@ -77,9 +77,10 @@ class UserController {
       password,
       email,
       phone_number,
+      role
     } = req.body.data
 
-    // Validasi jika user sudah ada maka error
+    // Validasi user
     const {
       error
     } = registerValidation(req.body.data)
@@ -116,7 +117,7 @@ class UserController {
           full_name,
           username,
           password: hashedPassword,
-          salt: salt,
+          salt,
           email,
           phone_number,
           role: "user"
@@ -148,7 +149,6 @@ class UserController {
       username,
       email,
       phone_number,
-      role,
       password
     } = req.body.data;
 
@@ -156,8 +156,7 @@ class UserController {
       full_name,
       username,
       email,
-      phone_number,
-      role
+      phone_number
     }, {
       where: {
         id: id

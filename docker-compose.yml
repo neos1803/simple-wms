@@ -1,0 +1,24 @@
+version: "3"
+services: 
+    redis-server:
+        image: "redis"
+    mysql:
+        image: "mysql:5.7"
+        environment: 
+            MYSQL_DATABASE : wms_db
+            MYSQL_ROOT_PASSWORD : root
+            MYSQL_USER : root
+        ports: 
+            - "3306:3306"
+    be-wms:
+        build: .
+        env_file: .env
+        # depends_on: 
+        #     - mysql
+        environment: 
+            - DB_USERNAME=root
+            - DB_PASSWORD=root
+            - DB_HOST=mysql
+            - DB_NAME=wms_db
+        ports: 
+            - "3000:3000"

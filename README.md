@@ -1,14 +1,13 @@
-# Pengerjaan Ulang Try Out 1 - Simple Warehouse Management
+# Dockerize Backend Simple WMS
 
-# Fitur Utama :
-
-- [x] Strukturisasi folder - route/v1/
-- [x] Inisialisasi Database dan Migration
-- [x] Inisialisasi controller
-- [x] Implementasi CRUD
-- [x] Middleware Auth
-- [x] Struktur json response dan request
-- [x] Paginasi
-- [?] Implementasi Nodemailer ?
-- [x] Implementasi Cloudinary
-- [x] Print Out
+- Pull image mysql
+- Pull image redis
+- Rubah sedikit kodingan di app.js untuk mencoba redis
+- Buat compose.yml
+- Di dalam compose.yml, target file env dan assign nilai envnya
+- Buat .dockerignore dengan isi node_modules supaya menghindari error,
+- Di dalam compose.yml, nama host menjadi nama service mysql
+- Jangan lupa ngebind port 3306 pada mysql, supaya tidak error
+- Setelah selesai compose up, buka shell be-wms
+- Kemudian npx sequelize-cli db:create -> db:migrate -> db:seed:all
+- Jalankan localhost:3000 untuk melihat contoh redis

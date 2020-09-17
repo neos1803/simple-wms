@@ -8,9 +8,9 @@ const {
 const response = require('../helpers/response')
 const pagination = require("../helpers/pagination")
 
-const attProductIn = ['date', 'total',]
-const attProduct = ['name', 'photo_url', 'stock', 'price']
-const attUser = ['full_name', 'username', 'email', 'phone_number', 'role']
+const attProductIn = ['id', 'date', 'total',]
+const attProduct = ['id', 'name', 'photo_url', 'stock', 'price']
+const attUser = ['full_name', 'username', 'email', 'phone_number']
 
 class ProductInController {
   // uji coba routes berjalan dengan baik
@@ -87,13 +87,13 @@ class ProductInController {
 
   static async save(req, res){
     try {
-      const { date, total, product_id } = req.body.data
+      const { total, product_id } = req.body.data
 
       const findProduct = await Product.findByPk(product_id)
 
       const saveIn = await Product_In.create({
         product_id,
-        date,
+        date: new Date(),
         total
       })
 
@@ -120,10 +120,12 @@ class ProductInController {
 
   static async update(req, res){
     const { id } = req.params
-    const { product_id, date, total } = req.body.data
+    const { product_id, total } = req.body.data
 
     const inUpdate = await Product_In.update({
-      product_id, date, total
+      product_id,
+      date: new Date(),
+      total
     }, {
       where: { id: id }
     })
@@ -158,21 +160,6 @@ class ProductInController {
     // mengambil param
     const { id } = req.params
 
-    // cari data yg akan dihapus
-    const findData = await Product_In.findByPk(
-      id, {
-        attributes: attProductIn,
-        include: [{
-          model: Product,
-          attributes: attProduct,
-          include: [{
-            model: User,
-            as: "supplier",
-            attributes: attUser
-          }]
-        }]
-      })
-
     // hapus data
     const delIn = await Product_In.destroy({
       where: { id: id }
@@ -180,9 +167,9 @@ class ProductInController {
 
     try {
       if (delIn) {
-        return res.status(200).json(response("Success", "Sukses hapus data user!", findData))
+        return res.status(200).json(response("Success", "Sukses hapus data produk in!", `ID : ${id}`))
       } else {
-        return res.status(400).json(response("Failed", "Data tidak user tidak ada!", `ID : ${id}`))
+        return res.status(400).json(response("Failed", "Data produk in tidak ada!", `ID : ${id}`))
       }
     } catch (error) {
       return res.status(400).json(response("Failed", error.message, "Kosong"))
